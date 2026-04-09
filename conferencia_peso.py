@@ -10,14 +10,6 @@ if 'historico' not in st.session_state:
         'AL', 'Descrição', 'Volumes Tara', 'Peso Médio', 'Volumes Palete', 'Peso Bruto', 'Peso Líquido', 'Diferença'
     ])
 
-# Função para resetar os campos após salvar
-def limpar_campos():
-    st.session_state.al_input = ""
-    st.session_state.tara_input = 1
-    st.session_state.peso_total_input = 0.0
-    st.session_state.qtd_vol_input = 0
-    st.session_state.peso_bruto_input = 0.0
-
 # Título
 st.markdown('<h1 style="text-align: center; font-size: 30px;">Relatório de conferência por peso</h1>', unsafe_allow_html=True)
 
@@ -83,33 +75,46 @@ st.markdown(f"""<div style="background-color: #3e4116; padding: 10px; border-rad
 st.write('')
 
 # 4. BOTÃO SALVAR
-if st.button('✅ Confirmar e salvar no relatório', use_container_width=True):
-    if al_busca != "" and descricao_al_resultado != "AL não encontrado":
-        # Primeiro: Capturamos os dados
+def processar_salvamento():
+    # Só salva se o AL for válido
+    if st.session_state.al_input != "" and descricao_al_resultado != "AL não encontrado":
         novo_registro = {
-            'AL': al_busca,
+            'AL': st.session_state.al_input,
             'Descrição': descricao_al_resultado,
-            'Volumes Tara': und_tara,
+            'Volumes Tara': st.session_state.tara_input,
             'Peso Médio': peso_medio_kg_und,
-            'Volumes Palete': qtd_volume_palete,
-            'Peso Bruto': peso_bruto_plt,
+            'Volumes Palete': st.session_state.qtd_vol_input,
+            'Peso Bruto': st.session_state.peso_bruto_input,
             'Peso Líquido': peso_liquido_plt,
             'Diferença': dif_peso_palete
         }
         
-        # Segundo: Salvamos no histórico
+        # Adiciona ao histórico
         st.session_state.historico = pd.concat([st.session_state.historico, pd.DataFrame([novo_registro])], ignore_index=True)
         
-        # Terceiro: Limpamos os campos usando um método que não gera conflito
-        # Em vez de chamar limpar_campos(), vamos apenas resetar e dar rerun
-        for key in ['al_input', 'peso_total_input', 'peso_bruto_input', 'qtd_vol_input']:
-            if key in st.session_state:
-                del st.session_state[key] # Deletar a chave força o widget a voltar ao valor inicial
+        # SINALIZADOR para mostrar a mensagem de sucesso depois do rerun
+        st.session_state.salvo_com_sucesso = True
         
-        st.success("Dados registrados!")
-        st.rerun() 
+        # AGORA SIM, limpa os campos
+        st.session_state.al_input = ""
+        st.session_state.tara_input = 1
+        st.session_state.peso_total_input = 0.0
+        st.session_state.qtd_vol_input = 0
+        st.session_state.peso_bruto_input = 0.0
     else:
-        st.error("Por favor, insira um AL válido antes de salvar.")
+        st.session_state.erro_validacao = True
+
+# 2. O Botão agora apenas chama a função
+st.button('✅ Confirmar e salvar no relatório', use_container_width=True, on_click=processar_salvamento)
+
+# 3. Exibe as mensagens (opcional)
+if st.session_state.get('salvo_com_sucesso'):
+    st.success("Dados registrados e campos limpos!")
+    st.session_state.salvo_com_sucesso = False # Reseta o sinalizador
+
+if st.session_state.get('erro_validacao'):
+    st.error("Por favor, insira um AL válido.")
+    st.session_state.erro_validacao = False # Reseta o sinalizador
 
 # 5. EXIBIÇÃO DA TABELA ACUMULADA
 st.write("---")
