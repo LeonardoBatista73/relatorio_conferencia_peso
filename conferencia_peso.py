@@ -123,7 +123,7 @@ if st.session_state.get('erro_validacao'):
 
 # EXIBIÇÃO DA TABELA ACUMULADA
 st.write("---")
-st.subheader("📋 Conferências Realizadas")
+st.markdown('<h1 style="text-align: center; font-size: 30px;">📋 Conferências Realizadas</h1>', unsafe_allow_html=True)
 st.dataframe(st.session_state.historico, use_container_width=True)
 
 col9, col10 = st.columns(2)
