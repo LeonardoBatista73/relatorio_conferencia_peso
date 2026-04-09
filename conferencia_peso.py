@@ -74,6 +74,9 @@ st.markdown(f"""<div style="background-color: #3e4116; padding: 10px; border-rad
 
 st.write('')
 
+# Incluindo o campo para adicionar observações da conferência
+observacao = st.text_input('Observações')
+
 # 4. BOTÃO SALVAR
 def processar_salvamento():
     # Só salva se o AL for válido
@@ -86,7 +89,8 @@ def processar_salvamento():
             'Volumes Palete': st.session_state.qtd_vol_input,
             'Peso Bruto': st.session_state.peso_bruto_input,
             'Peso Líquido': peso_liquido_plt,
-            'Diferença': dif_peso_palete
+            'Diferença': dif_peso_palete,
+            'Observação': observacao
         }
         
         # Adiciona ao histórico
@@ -101,13 +105,14 @@ def processar_salvamento():
         st.session_state.peso_total_input = 0.0
         st.session_state.qtd_vol_input = 0
         st.session_state.peso_bruto_input = 0.0
+        st.session_state.observacao = ""
     else:
         st.session_state.erro_validacao = True
 
-# 2. O Botão agora apenas chama a função
+# O Botão agora apenas chama a função
 st.button('✅ Confirmar e salvar no relatório', use_container_width=True, on_click=processar_salvamento)
 
-# 3. Exibe as mensagens (opcional)
+# Exibe as mensagens (opcional)
 if st.session_state.get('salvo_com_sucesso'):
     st.success("Dados registrados e campos limpos!")
     st.session_state.salvo_com_sucesso = False # Reseta o sinalizador
@@ -116,9 +121,9 @@ if st.session_state.get('erro_validacao'):
     st.error("Por favor, insira um AL válido.")
     st.session_state.erro_validacao = False # Reseta o sinalizador
 
-# 5. EXIBIÇÃO DA TABELA ACUMULADA
+# EXIBIÇÃO DA TABELA ACUMULADA
 st.write("---")
-st.subheader("📋 Conferências realizadas")
+st.subheader("📋 Conferências Realizadas")
 st.dataframe(st.session_state.historico, use_container_width=True)
 
 col9, col10 = st.columns(2)
