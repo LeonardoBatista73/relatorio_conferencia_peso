@@ -28,6 +28,7 @@ st.write('')
 try:
     produtos_local20 = pd.read_excel('Produtos Local 20.xlsx', engine='openpyxl')
     produtos_local20['Código'] = produtos_local20['Código'].astype(str).str.strip()
+    produtos_local20['Descrição'] = produtos_local20['Descrição'].astype(str).str.strip()
 except:
     st.error("Arquivo 'Produtos Local 20.xlsx' não encontrado!")
     st.stop()
