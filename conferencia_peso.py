@@ -118,7 +118,7 @@ if st.session_state.get('erro_validacao'):
 
 # 5. EXIBIÇÃO DA TABELA ACUMULADA
 st.write("---")
-st.subheader("📋 Conferências Realizadas")
+st.subheader("📋 Conferências realizadas")
 st.dataframe(st.session_state.historico, use_container_width=True)
 
 col9, col10 = st.columns(2)
