@@ -30,7 +30,7 @@ col1, col2 = st.columns([1, 2])
 
 with col1:
     # Usamos a KEY para podermos limpar depois
-    al_busca = st.text_input('Digite o AL:', key='al_input').upper()
+    al_busca = st.text_input('Digite o AL:', key='al_input').str.upper()
 
 # Busca descrição
 al_resultado = produtos_local20[produtos_local20['Código'].str.upper() == al_busca.upper()]
