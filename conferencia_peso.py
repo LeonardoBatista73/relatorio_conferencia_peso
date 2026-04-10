@@ -42,7 +42,7 @@ with col2:
 
 col4, col5 = st.columns(2)
 with col4:
-    und_tara = st.number_input('Volumes para Tara:', min_value=1, step=1, format='%d', key='tara_input')
+    und_tara = st.number_input('Volumes para Tara:', min_value=0, step=1, format='%d', key='tara_input')
 with col5:
     peso_total_und = st.number_input('Peso total aferido:', min_value=0.0, format="%.3f", key='peso_total_input')
 
