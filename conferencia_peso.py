@@ -28,12 +28,9 @@ except:
 # 3. INTERAÇÃO DO USUÁRIO
 col1, col2 = st.columns([1, 2])
 
-def converter_maiusculo():
-    st.session_state.texto_caixa = st.session_state.texto_caixa.upper()
-
 with col1:
     # Usamos a KEY para podermos limpar depois
-    al_busca = st.text_input('Digite o AL:', key='al_input', on_change=converter_maiusculo).upper()
+    al_busca = st.text_input('Digite o AL:', key='al_input').upper()
 
 # Busca descrição
 al_resultado = produtos_local20[produtos_local20['Código'].str.upper() == al_busca.upper()]
